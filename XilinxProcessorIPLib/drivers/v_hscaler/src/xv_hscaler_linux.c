@@ -9,10 +9,10 @@
 #include "xv_hscaler.h"
 
 /***************** Macros (Inline Functions) Definitions *********************/
-#define MAX_UIO_PATH_SIZE       256
-#define MAX_UIO_NAME_SIZE       64
-#define MAX_UIO_MAPS            5
-#define UIO_INVALID_ADDR        0
+#define MAX_UIO_PATH_SIZE 256
+#define MAX_UIO_NAME_SIZE 64
+#define MAX_UIO_MAPS 5
+#define UIO_INVALID_ADDR 0
 
 /**************************** Type Definitions ******************************/
 typedef struct {
@@ -21,11 +21,11 @@ typedef struct {
 } XV_hscaler_uio_map;
 
 typedef struct {
-    int  uio_fd;
-    int  uio_num;
-    char name[ MAX_UIO_NAME_SIZE ];
-    char version[ MAX_UIO_NAME_SIZE ];
-    XV_hscaler_uio_map maps[ MAX_UIO_MAPS ];
+    int uio_fd;
+    int uio_num;
+    char name[MAX_UIO_NAME_SIZE];
+    char version[MAX_UIO_NAME_SIZE];
+    XV_hscaler_uio_map maps[MAX_UIO_MAPS];
 } XV_hscaler_uio_info;
 
 /***************** Variable Definitions **************************************/
@@ -36,80 +36,90 @@ static int line_from_file(char* filename, char* linebuf) {
     char* s;
     int i;
     FILE* fp = fopen(filename, "r");
-    if (!fp) return -1;
+    if (!fp)
+        return -1;
     s = fgets(linebuf, MAX_UIO_NAME_SIZE, fp);
     fclose(fp);
-    if (!s) return -2;
-    for (i=0; (*s)&&(i<MAX_UIO_NAME_SIZE); i++) {
-        if (*s == '\n') *s = 0;
+    if (!s)
+        return -2;
+    for (i = 0; (*s) && (i < MAX_UIO_NAME_SIZE); i++) {
+        if (*s == '\n')
+            *s = 0;
         s++;
     }
     return 0;
 }
 
 static int uio_info_read_name(XV_hscaler_uio_info* info) {
-    char file[ MAX_UIO_PATH_SIZE ];
+    char file[MAX_UIO_PATH_SIZE];
     sprintf(file, "/sys/class/uio/uio%d/name", info->uio_num);
     return line_from_file(file, info->name);
 }
 
 static int uio_info_read_version(XV_hscaler_uio_info* info) {
-    char file[ MAX_UIO_PATH_SIZE ];
+    char file[MAX_UIO_PATH_SIZE];
     sprintf(file, "/sys/class/uio/uio%d/version", info->uio_num);
     return line_from_file(file, info->version);
 }
 
 static int uio_info_read_map_addr(XV_hscaler_uio_info* info, int n) {
     int ret;
-    char file[ MAX_UIO_PATH_SIZE ];
+    char file[MAX_UIO_PATH_SIZE];
     info->maps[n].addr = UIO_INVALID_ADDR;
     sprintf(file, "/sys/class/uio/uio%d/maps/map%d/addr", info->uio_num, n);
     FILE* fp = fopen(file, "r");
-    if (!fp) return -1;
+    if (!fp)
+        return -1;
     ret = fscanf(fp, "0x%x", &info->maps[n].addr);
     fclose(fp);
-    if (ret < 0) return -2;
+    if (ret < 0)
+        return -2;
     return 0;
 }
 
 static int uio_info_read_map_size(XV_hscaler_uio_info* info, int n) {
     int ret;
-    char file[ MAX_UIO_PATH_SIZE ];
+    char file[MAX_UIO_PATH_SIZE];
     sprintf(file, "/sys/class/uio/uio%d/maps/map%d/size", info->uio_num, n);
     FILE* fp = fopen(file, "r");
-    if (!fp) return -1;
+    if (!fp)
+        return -1;
     ret = fscanf(fp, "0x%x", &info->maps[n].size);
     fclose(fp);
-    if (ret < 0) return -2;
+    if (ret < 0)
+        return -2;
     return 0;
 }
 
-int XV_hscaler_Initialize(XV_hscaler *InstancePtr, const char* InstanceName) {
-    XV_hscaler_uio_info *InfoPtr = &uio_info;
-    struct dirent **namelist;
+int XV_hscaler_Initialize(XV_hscaler* InstancePtr, const char* InstanceName) {
+    XV_hscaler_uio_info* InfoPtr = &uio_info;
+    struct dirent** namelist;
     int i, n;
     char* s;
-    char file[ MAX_UIO_PATH_SIZE ];
-    char name[ MAX_UIO_NAME_SIZE ];
+    char file[MAX_UIO_PATH_SIZE];
+    char name[MAX_UIO_NAME_SIZE];
     int flag = 0;
 
     assert(InstancePtr != NULL);
 
     n = scandir("/sys/class/uio", &namelist, 0, alphasort);
-    if (n < 0)  return XST_DEVICE_NOT_FOUND;
-    for (i = 0;  i < n; i++) {
-    strcpy(file, "/sys/class/uio/");
-    strcat(file, namelist[i]->d_name);
-    strcat(file, "/name");
-        if ((line_from_file(file, name) == 0) && (strcmp(name, InstanceName) == 0)) {
+    if (n < 0)
+        return XST_DEVICE_NOT_FOUND;
+    for (i = 0; i < n; i++) {
+        strcpy(file, "/sys/class/uio/");
+        strcat(file, namelist[i]->d_name);
+        strcat(file, "/name");
+        if ((line_from_file(file, name) == 0) &&
+            (strcmp(name, InstanceName) == 0)) {
             flag = 1;
             s = namelist[i]->d_name;
-            s += 3; // "uio"
+            s += 3;  // "uio"
             InfoPtr->uio_num = atoi(s);
             break;
         }
     }
-    if (flag == 0)  return XST_DEVICE_NOT_FOUND;
+    if (flag == 0)
+        return XST_DEVICE_NOT_FOUND;
 
     uio_info_read_name(InfoPtr);
     uio_info_read_version(InfoPtr);
@@ -124,7 +134,9 @@ int XV_hscaler_Initialize(XV_hscaler *InstancePtr, const char* InstanceName) {
     }
 
     // NOTE: slave interface 'Ctrl' should be mapped to uioX/map0
-    InstancePtr->Config.BaseAddress = (u32)mmap(NULL, InfoPtr->maps[0].size, PROT_READ|PROT_WRITE, MAP_SHARED, InfoPtr->uio_fd, 0 * getpagesize());
+    InstancePtr->Config.BaseAddress =
+        (u32)mmap(NULL, InfoPtr->maps[0].size, PROT_READ | PROT_WRITE,
+                  MAP_SHARED, InfoPtr->uio_fd, 0 * getpagesize());
     assert(InstancePtr->Config.BaseAddress);
 
     InstancePtr->IsReady = XIL_COMPONENT_IS_READY;
@@ -132,8 +144,8 @@ int XV_hscaler_Initialize(XV_hscaler *InstancePtr, const char* InstanceName) {
     return XST_SUCCESS;
 }
 
-int XV_hscaler_Release(XV_hscaler *InstancePtr) {
-    XV_hscaler_uio_info *InfoPtr = &uio_info;
+int XV_hscaler_Release(XV_hscaler* InstancePtr) {
+    XV_hscaler_uio_info* InfoPtr = &uio_info;
 
     assert(InstancePtr != NULL);
     assert(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);

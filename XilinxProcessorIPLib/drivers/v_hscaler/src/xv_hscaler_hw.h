@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: MIT
 // ==============================================================
 
-#ifndef XV_HSCALER_HW_H_        /* prevent circular inclusions */
-#define XV_HSCALER_HW_H_        /* by using protection macros  */
+#ifndef XV_HSCALER_HW_H_ /* prevent circular inclusions */
+#define XV_HSCALER_HW_H_ /* by using protection macros  */
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,18 +61,19 @@ extern "C" {
 //          Word n : bit [ 8: 0] - HwReg_phasesH_V[2n]
 //                   bit [24:16] - HwReg_phasesH_V[2n+1]
 //                   others      - reserved
-// (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
+// (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on
+// Handshake)
 
-#define XV_HSCALER_CTRL_ADDR_AP_CTRL              0x0000
-#define XV_HSCALER_CTRL_ADDR_GIE                  0x0004
-#define XV_HSCALER_CTRL_ADDR_IER                  0x0008
-#define XV_HSCALER_CTRL_ADDR_ISR                  0x000c
-#define XV_HSCALER_CTRL_ADDR_HWREG_HEIGHT_DATA    0x0010
-#define XV_HSCALER_CTRL_BITS_HWREG_HEIGHT_DATA    16
-#define XV_HSCALER_CTRL_ADDR_HWREG_WIDTHIN_DATA   0x0018
-#define XV_HSCALER_CTRL_BITS_HWREG_WIDTHIN_DATA   16
-#define XV_HSCALER_CTRL_ADDR_HWREG_WIDTHOUT_DATA  0x0020
-#define XV_HSCALER_CTRL_BITS_HWREG_WIDTHOUT_DATA  16
+#define XV_HSCALER_CTRL_ADDR_AP_CTRL 0x0000
+#define XV_HSCALER_CTRL_ADDR_GIE 0x0004
+#define XV_HSCALER_CTRL_ADDR_IER 0x0008
+#define XV_HSCALER_CTRL_ADDR_ISR 0x000c
+#define XV_HSCALER_CTRL_ADDR_HWREG_HEIGHT_DATA 0x0010
+#define XV_HSCALER_CTRL_BITS_HWREG_HEIGHT_DATA 16
+#define XV_HSCALER_CTRL_ADDR_HWREG_WIDTHIN_DATA 0x0018
+#define XV_HSCALER_CTRL_BITS_HWREG_WIDTHIN_DATA 16
+#define XV_HSCALER_CTRL_ADDR_HWREG_WIDTHOUT_DATA 0x0020
+#define XV_HSCALER_CTRL_BITS_HWREG_WIDTHOUT_DATA 16
 #define XV_HSCALER_CTRL_ADDR_HWREG_COLORMODE_DATA 0x0028
 #define XV_HSCALER_CTRL_BITS_HWREG_COLORMODE_DATA 8
 #define XV_HSCALER_CTRL_ADDR_HWREG_PIXELRATE_DATA 0x0030
@@ -81,12 +82,12 @@ extern "C" {
 #define XV_HSCALER_CTRL_BITS_HWREG_COLORMODEOUT_DATA 8
 #define XV_HSCALER_CTRL_ADDR_HWREG_HFLTCOEFF_BASE 0x0800
 #define XV_HSCALER_CTRL_ADDR_HWREG_HFLTCOEFF_HIGH 0x0bff
-#define XV_HSCALER_CTRL_WIDTH_HWREG_HFLTCOEFF     16
-#define XV_HSCALER_CTRL_DEPTH_HWREG_HFLTCOEFF     384
+#define XV_HSCALER_CTRL_WIDTH_HWREG_HFLTCOEFF 16
+#define XV_HSCALER_CTRL_DEPTH_HWREG_HFLTCOEFF 384
 #define XV_HSCALER_CTRL_ADDR_HWREG_PHASESH_V_BASE 0x4000
 #define XV_HSCALER_CTRL_ADDR_HWREG_PHASESH_V_HIGH 0x7fff
-#define XV_HSCALER_CTRL_WIDTH_HWREG_PHASESH_V     9
-#define XV_HSCALER_CTRL_DEPTH_HWREG_PHASESH_V     8192
+#define XV_HSCALER_CTRL_WIDTH_HWREG_PHASESH_V 9
+#define XV_HSCALER_CTRL_DEPTH_HWREG_PHASESH_V 8192
 
 #ifdef __cplusplus
 }

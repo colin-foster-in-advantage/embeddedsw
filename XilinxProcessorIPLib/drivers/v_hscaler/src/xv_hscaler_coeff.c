@@ -1,31 +1,32 @@
 /******************************************************************************
-* Copyright (C) 2015 - 2020 Xilinx, Inc.  All rights reserved.
-* SPDX-License-Identifier: MIT
-******************************************************************************/
+ * Copyright (C) 2015 - 2020 Xilinx, Inc.  All rights reserved.
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 /*****************************************************************************/
 /**
-*
-* @file xv_hscaler_coeff.c
-* @addtogroup v_hscaler_v3_4
-* @{
-* @details
-*
-* This file provides the default fixed coefficient sets for supported taps
-*
-* <pre>
-* MODIFICATION HISTORY:
-*
-* Ver   Who    Date     Changes
-* ----- ---- -------- -------------------------------------------------------
-* 1.0  rco   07/31/15   Initial Release
-* 3.1  rco   02/09/17   Fix c++ compilation warnings
-* 3.3  vsa   04/07/20   Improve quality with better coefficients
-* </pre>
-*
-******************************************************************************/
+ *
+ * @file xv_hscaler_coeff.c
+ * @addtogroup v_hscaler_v3_4
+ * @{
+ * @details
+ *
+ * This file provides the default fixed coefficient sets for supported taps
+ *
+ * <pre>
+ * MODIFICATION HISTORY:
+ *
+ * Ver   Who    Date     Changes
+ * ----- ---- -------- -------------------------------------------------------
+ * 1.0  rco   07/31/15   Initial Release
+ * 3.1  rco   02/09/17   Fix c++ compilation warnings
+ * 3.3  vsa   04/07/20   Improve quality with better coefficients
+ * </pre>
+ *
+ ******************************************************************************/
 #include "xv_hscaler_l2.h"
 
+// clang-format off
 const short XV_hscaler_Lanczos2_taps6[XV_HSCALER_MAX_H_PHASES][XV_HSCALER_TAPS_6] =
 {
 	{   0,    0, 4096,    0,    0,   0, },
@@ -775,3 +776,4 @@ const short XV_hscaler_fixedcoeff_taps12_ScalingRatio4[XV_HSCALER_MAX_H_PHASES][
 	{ -22, -19,   2, 159, 506,  894, 1059, 874, 480, 143,  -2,  22, },
 	{ -22, -19,   1, 155, 499,  889, 1059, 879, 487, 147,  -1,  22, }
 };
+// clang-format on

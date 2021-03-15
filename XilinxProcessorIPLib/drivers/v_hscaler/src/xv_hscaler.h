@@ -12,21 +12,21 @@ extern "C" {
 
 /***************************** Include Files *********************************/
 #ifndef __linux__
-#include "xil_types.h"
 #include "xil_assert.h"
-#include "xstatus.h"
 #include "xil_io.h"
+#include "xil_types.h"
+#include "xstatus.h"
 #else
-#include <stdint.h>
 #include <assert.h>
 #include <dirent.h>
 #include <fcntl.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
 #include <unistd.h>
-#include <stddef.h>
 #endif
 #include "xv_hscaler_hw.h"
 
@@ -37,10 +37,10 @@ typedef uint16_t u16;
 typedef uint32_t u32;
 #else
 /**
-* This typedef contains configuration information for the horizontal scaler
-* core. Each core instance should have a configuration structure
-* associated.
-*/
+ * This typedef contains configuration information for the horizontal scaler
+ * core. Each core instance should have a configuration structure
+ * associated.
+ */
 typedef struct {
     u16 DeviceId;         /**< Unique ID  of device */
     UINTPTR BaseAddress;  /**< The base address of the core instance. */
@@ -59,8 +59,8 @@ typedef struct {
 #endif
 
 /**
-* Driver instance data. An instance must be allocated for each core in use.
-*/
+ * Driver instance data. An instance must be allocated for each core in use.
+ */
 typedef struct {
     XV_hscaler_Config Config; /**< Hardware Configuration */
     u32 IsReady;              /**< Device is initialized and ready */
@@ -78,72 +78,96 @@ typedef struct {
 #define XV_hscaler_ReadReg(BaseAddress, RegOffset) \
     *(volatile u32*)((BaseAddress) + (RegOffset))
 
-#define Xil_AssertVoid(expr)    assert(expr)
+#define Xil_AssertVoid(expr) assert(expr)
 #define Xil_AssertNonvoid(expr) assert(expr)
 
-#define XST_SUCCESS             0
-#define XST_DEVICE_NOT_FOUND    2
-#define XST_OPEN_DEVICE_FAILED  3
-#define XIL_COMPONENT_IS_READY  1
+#define XST_SUCCESS 0
+#define XST_DEVICE_NOT_FOUND 2
+#define XST_OPEN_DEVICE_FAILED 3
+#define XIL_COMPONENT_IS_READY 1
 #endif
 
 /************************** Function Prototypes *****************************/
 #ifndef __linux__
-int XV_hscaler_Initialize(XV_hscaler *InstancePtr, u16 DeviceId);
+int XV_hscaler_Initialize(XV_hscaler* InstancePtr, u16 DeviceId);
 XV_hscaler_Config* XV_hscaler_LookupConfig(u16 DeviceId);
-int XV_hscaler_CfgInitialize(XV_hscaler *InstancePtr,
-                             XV_hscaler_Config *ConfigPtr,
-							 UINTPTR EffectiveAddr);
+int XV_hscaler_CfgInitialize(XV_hscaler* InstancePtr,
+                             XV_hscaler_Config* ConfigPtr,
+                             UINTPTR EffectiveAddr);
 #else
-int XV_hscaler_Initialize(XV_hscaler *InstancePtr, const char* InstanceName);
-int XV_hscaler_Release(XV_hscaler *InstancePtr);
+int XV_hscaler_Initialize(XV_hscaler* InstancePtr, const char* InstanceName);
+int XV_hscaler_Release(XV_hscaler* InstancePtr);
 #endif
 
-void XV_hscaler_Start(XV_hscaler *InstancePtr);
-u32 XV_hscaler_IsDone(XV_hscaler *InstancePtr);
-u32 XV_hscaler_IsIdle(XV_hscaler *InstancePtr);
-u32 XV_hscaler_IsReady(XV_hscaler *InstancePtr);
-void XV_hscaler_EnableAutoRestart(XV_hscaler *InstancePtr);
-void XV_hscaler_DisableAutoRestart(XV_hscaler *InstancePtr);
+void XV_hscaler_Start(XV_hscaler* InstancePtr);
+u32 XV_hscaler_IsDone(XV_hscaler* InstancePtr);
+u32 XV_hscaler_IsIdle(XV_hscaler* InstancePtr);
+u32 XV_hscaler_IsReady(XV_hscaler* InstancePtr);
+void XV_hscaler_EnableAutoRestart(XV_hscaler* InstancePtr);
+void XV_hscaler_DisableAutoRestart(XV_hscaler* InstancePtr);
 
-void XV_hscaler_Set_HwReg_Height(XV_hscaler *InstancePtr, u32 Data);
-u32 XV_hscaler_Get_HwReg_Height(XV_hscaler *InstancePtr);
-void XV_hscaler_Set_HwReg_WidthIn(XV_hscaler *InstancePtr, u32 Data);
-u32 XV_hscaler_Get_HwReg_WidthIn(XV_hscaler *InstancePtr);
-void XV_hscaler_Set_HwReg_WidthOut(XV_hscaler *InstancePtr, u32 Data);
-u32 XV_hscaler_Get_HwReg_WidthOut(XV_hscaler *InstancePtr);
-void XV_hscaler_Set_HwReg_ColorMode(XV_hscaler *InstancePtr, u32 Data);
-u32 XV_hscaler_Get_HwReg_ColorMode(XV_hscaler *InstancePtr);
-void XV_hscaler_Set_HwReg_ColorModeOut(XV_hscaler *InstancePtr, u32 Data);
-u32 XV_hscaler_Get_HwReg_ColorModeOut(XV_hscaler *InstancePtr);
-void XV_hscaler_Set_HwReg_PixelRate(XV_hscaler *InstancePtr, u32 Data);
-u32 XV_hscaler_Get_HwReg_PixelRate(XV_hscaler *InstancePtr);
-UINTPTR XV_hscaler_Get_HwReg_hfltCoeff_BaseAddress(XV_hscaler *InstancePtr);
-UINTPTR XV_hscaler_Get_HwReg_hfltCoeff_HighAddress(XV_hscaler *InstancePtr);
-u32 XV_hscaler_Get_HwReg_hfltCoeff_TotalBytes(XV_hscaler *InstancePtr);
-u32 XV_hscaler_Get_HwReg_hfltCoeff_BitWidth(XV_hscaler *InstancePtr);
-u32 XV_hscaler_Get_HwReg_hfltCoeff_Depth(XV_hscaler *InstancePtr);
-u32 XV_hscaler_Write_HwReg_hfltCoeff_Words(XV_hscaler *InstancePtr, int offset, int *data, int length);
-u32 XV_hscaler_Read_HwReg_hfltCoeff_Words(XV_hscaler *InstancePtr, int offset, int *data, int length);
-u32 XV_hscaler_Write_HwReg_hfltCoeff_Bytes(XV_hscaler *InstancePtr, int offset, char *data, int length);
-u32 XV_hscaler_Read_HwReg_hfltCoeff_Bytes(XV_hscaler *InstancePtr, int offset, char *data, int length);
-UINTPTR XV_hscaler_Get_HwReg_phasesH_V_BaseAddress(XV_hscaler *InstancePtr);
-UINTPTR XV_hscaler_Get_HwReg_phasesH_V_HighAddress(XV_hscaler *InstancePtr);
-u32 XV_hscaler_Get_HwReg_phasesH_V_TotalBytes(XV_hscaler *InstancePtr);
-u32 XV_hscaler_Get_HwReg_phasesH_V_BitWidth(XV_hscaler *InstancePtr);
-u32 XV_hscaler_Get_HwReg_phasesH_V_Depth(XV_hscaler *InstancePtr);
-u32 XV_hscaler_Write_HwReg_phasesH_V_Words(XV_hscaler *InstancePtr, int offset, int *data, int length);
-u32 XV_hscaler_Read_HwReg_phasesH_V_Words(XV_hscaler *InstancePtr, int offset, int *data, int length);
-u32 XV_hscaler_Write_HwReg_phasesH_V_Bytes(XV_hscaler *InstancePtr, int offset, char *data, int length);
-u32 XV_hscaler_Read_HwReg_phasesH_V_Bytes(XV_hscaler *InstancePtr, int offset, char *data, int length);
+void XV_hscaler_Set_HwReg_Height(XV_hscaler* InstancePtr, u32 Data);
+u32 XV_hscaler_Get_HwReg_Height(XV_hscaler* InstancePtr);
+void XV_hscaler_Set_HwReg_WidthIn(XV_hscaler* InstancePtr, u32 Data);
+u32 XV_hscaler_Get_HwReg_WidthIn(XV_hscaler* InstancePtr);
+void XV_hscaler_Set_HwReg_WidthOut(XV_hscaler* InstancePtr, u32 Data);
+u32 XV_hscaler_Get_HwReg_WidthOut(XV_hscaler* InstancePtr);
+void XV_hscaler_Set_HwReg_ColorMode(XV_hscaler* InstancePtr, u32 Data);
+u32 XV_hscaler_Get_HwReg_ColorMode(XV_hscaler* InstancePtr);
+void XV_hscaler_Set_HwReg_ColorModeOut(XV_hscaler* InstancePtr, u32 Data);
+u32 XV_hscaler_Get_HwReg_ColorModeOut(XV_hscaler* InstancePtr);
+void XV_hscaler_Set_HwReg_PixelRate(XV_hscaler* InstancePtr, u32 Data);
+u32 XV_hscaler_Get_HwReg_PixelRate(XV_hscaler* InstancePtr);
+UINTPTR XV_hscaler_Get_HwReg_hfltCoeff_BaseAddress(XV_hscaler* InstancePtr);
+UINTPTR XV_hscaler_Get_HwReg_hfltCoeff_HighAddress(XV_hscaler* InstancePtr);
+u32 XV_hscaler_Get_HwReg_hfltCoeff_TotalBytes(XV_hscaler* InstancePtr);
+u32 XV_hscaler_Get_HwReg_hfltCoeff_BitWidth(XV_hscaler* InstancePtr);
+u32 XV_hscaler_Get_HwReg_hfltCoeff_Depth(XV_hscaler* InstancePtr);
+u32 XV_hscaler_Write_HwReg_hfltCoeff_Words(XV_hscaler* InstancePtr,
+                                           int offset,
+                                           int* data,
+                                           int length);
+u32 XV_hscaler_Read_HwReg_hfltCoeff_Words(XV_hscaler* InstancePtr,
+                                          int offset,
+                                          int* data,
+                                          int length);
+u32 XV_hscaler_Write_HwReg_hfltCoeff_Bytes(XV_hscaler* InstancePtr,
+                                           int offset,
+                                           char* data,
+                                           int length);
+u32 XV_hscaler_Read_HwReg_hfltCoeff_Bytes(XV_hscaler* InstancePtr,
+                                          int offset,
+                                          char* data,
+                                          int length);
+UINTPTR XV_hscaler_Get_HwReg_phasesH_V_BaseAddress(XV_hscaler* InstancePtr);
+UINTPTR XV_hscaler_Get_HwReg_phasesH_V_HighAddress(XV_hscaler* InstancePtr);
+u32 XV_hscaler_Get_HwReg_phasesH_V_TotalBytes(XV_hscaler* InstancePtr);
+u32 XV_hscaler_Get_HwReg_phasesH_V_BitWidth(XV_hscaler* InstancePtr);
+u32 XV_hscaler_Get_HwReg_phasesH_V_Depth(XV_hscaler* InstancePtr);
+u32 XV_hscaler_Write_HwReg_phasesH_V_Words(XV_hscaler* InstancePtr,
+                                           int offset,
+                                           int* data,
+                                           int length);
+u32 XV_hscaler_Read_HwReg_phasesH_V_Words(XV_hscaler* InstancePtr,
+                                          int offset,
+                                          int* data,
+                                          int length);
+u32 XV_hscaler_Write_HwReg_phasesH_V_Bytes(XV_hscaler* InstancePtr,
+                                           int offset,
+                                           char* data,
+                                           int length);
+u32 XV_hscaler_Read_HwReg_phasesH_V_Bytes(XV_hscaler* InstancePtr,
+                                          int offset,
+                                          char* data,
+                                          int length);
 
-void XV_hscaler_InterruptGlobalEnable(XV_hscaler *InstancePtr);
-void XV_hscaler_InterruptGlobalDisable(XV_hscaler *InstancePtr);
-void XV_hscaler_InterruptEnable(XV_hscaler *InstancePtr, u32 Mask);
-void XV_hscaler_InterruptDisable(XV_hscaler *InstancePtr, u32 Mask);
-void XV_hscaler_InterruptClear(XV_hscaler *InstancePtr, u32 Mask);
-u32 XV_hscaler_InterruptGetEnabled(XV_hscaler *InstancePtr);
-u32 XV_hscaler_InterruptGetStatus(XV_hscaler *InstancePtr);
+void XV_hscaler_InterruptGlobalEnable(XV_hscaler* InstancePtr);
+void XV_hscaler_InterruptGlobalDisable(XV_hscaler* InstancePtr);
+void XV_hscaler_InterruptEnable(XV_hscaler* InstancePtr, u32 Mask);
+void XV_hscaler_InterruptDisable(XV_hscaler* InstancePtr, u32 Mask);
+void XV_hscaler_InterruptClear(XV_hscaler* InstancePtr, u32 Mask);
+u32 XV_hscaler_InterruptGetEnabled(XV_hscaler* InstancePtr);
+u32 XV_hscaler_InterruptGetStatus(XV_hscaler* InstancePtr);
 
 #ifdef __cplusplus
 }

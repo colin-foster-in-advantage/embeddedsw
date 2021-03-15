@@ -1,7 +1,7 @@
 /******************************************************************************
-* Copyright (C) 2015 - 2020 Xilinx, Inc.  All rights reserved.
-* SPDX-License-Identifier: MIT
-******************************************************************************/
+ * Copyright (C) 2015 - 2020 Xilinx, Inc.  All rights reserved.
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 /*****************************************************************************/
 /**
@@ -19,7 +19,8 @@
 * <b>H Scaler IP Features </b>
 *
 * This H-Scaler IP supports following features
-* 	- 3 Channel Scaler with RGB, YUV444 and optional YUV422, and YUV420 support
+* 	- 3 Channel Scaler with RGB, YUV444 and optional YUV422, and YUV420
+support
 * 	- Scale horizontally to 4K line at 60Hz
 * 	- up to 16bits color depth
 *	- 1, 2 or 4 pixel per clock processing
@@ -73,60 +74,57 @@
 * </pre>
 *
 ******************************************************************************/
-#ifndef XV_HSCALER_L2_H        /* prevent circular inclusions */
-#define XV_HSCALER_L2_H        /* by using protection macros  */
+#ifndef XV_HSCALER_L2_H /* prevent circular inclusions */
+#define XV_HSCALER_L2_H /* by using protection macros  */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "xvidc.h"
 #include "xv_hscaler.h"
+#include "xvidc.h"
 
 /************************** Constant Definitions *****************************/
 /** @name Hw Configuration
  * @{
  * The following constants define the scaler HW MAX configuration
  */
-#define XV_HSCALER_MAX_H_TAPS           (12)
-#define XV_HSCALER_MAX_H_PHASES         (64)
-#define XV_HSCALER_MAX_LINE_WIDTH       (8192)
+#define XV_HSCALER_MAX_H_TAPS (12)
+#define XV_HSCALER_MAX_H_PHASES (64)
+#define XV_HSCALER_MAX_LINE_WIDTH (8192)
 
 /**************************** Type Definitions *******************************/
 /**
  * This typedef enumerates the Scaler Type
  */
-typedef enum
-{
-  XV_HSCALER_BILINEAR = 0,
-  XV_HSCALER_BICUBIC,
-  XV_HSCALER_POLYPHASE
-}XV_HSCALER_TYPE;
+typedef enum {
+    XV_HSCALER_BILINEAR = 0,
+    XV_HSCALER_BICUBIC,
+    XV_HSCALER_POLYPHASE
+} XV_HSCALER_TYPE;
 
 /**
  * This typedef enumerates the supported taps
  */
-typedef enum
-{
-  XV_HSCALER_TAPS_6  = 6,
-  XV_HSCALER_TAPS_8  = 8,
-  XV_HSCALER_TAPS_10 = 10,
-  XV_HSCALER_TAPS_12 = 12
-}XV_HSCALER_TAPS;
+typedef enum {
+    XV_HSCALER_TAPS_6 = 6,
+    XV_HSCALER_TAPS_8 = 8,
+    XV_HSCALER_TAPS_10 = 10,
+    XV_HSCALER_TAPS_12 = 12
+} XV_HSCALER_TAPS;
 
 /**
  * H Scaler Layer 2 data. The user is required to allocate a variable
  * of this type for every H Scaler device in the system. A pointer to a
  * variable of this type is then passed to the driver API functions.
  */
-typedef struct
-{
-  XV_hscaler Hsc; /*<< Layer 1 instance */
-  u8 UseExtCoeff;
-  short coeff[XV_HSCALER_MAX_H_PHASES][XV_HSCALER_MAX_H_TAPS];
-  u64 phasesH[XV_HSCALER_MAX_LINE_WIDTH];
-  u64 phasesH_H[XV_HSCALER_MAX_LINE_WIDTH];
-}XV_Hscaler_l2;
+typedef struct {
+    XV_hscaler Hsc; /*<< Layer 1 instance */
+    u8 UseExtCoeff;
+    short coeff[XV_HSCALER_MAX_H_PHASES][XV_HSCALER_MAX_H_TAPS];
+    u64 phasesH[XV_HSCALER_MAX_LINE_WIDTH];
+    u64 phasesH_H[XV_HSCALER_MAX_LINE_WIDTH];
+} XV_Hscaler_l2;
 
 /************************** Macros Definitions *******************************/
 
@@ -140,7 +138,7 @@ typedef struct
  *
  *****************************************************************************/
 #define XV_HscalerIs422Enabled(InstancePtr) \
-   ((InstancePtr)->Hsc.Config.Is422Enabled)
+    ((InstancePtr)->Hsc.Config.Is422Enabled)
 
 /*****************************************************************************/
 /**
@@ -152,7 +150,7 @@ typedef struct
  *
  *****************************************************************************/
 #define XV_HscalerIs420Enabled(InstancePtr) \
-   ((InstancePtr)->Hsc.Config.Is420Enabled)
+    ((InstancePtr)->Hsc.Config.Is420Enabled)
 
 /*****************************************************************************/
 /**
@@ -164,26 +162,26 @@ typedef struct
  *
  *****************************************************************************/
 #define XV_HscalerIsCscEnabled(InstancePtr) \
-   ((InstancePtr)->Hsc.Config.IsCscEnabled)
+    ((InstancePtr)->Hsc.Config.IsCscEnabled)
 
 /************************** Function Prototypes ******************************/
-int XV_HScalerInitialize(XV_Hscaler_l2 *InstancePtr, u16 DeviceId);
-void XV_HScalerStart(XV_Hscaler_l2 *InstancePtr);
-void XV_HScalerStop(XV_Hscaler_l2 *InstancePtr);
-void XV_HScalerLoadExtCoeff(XV_Hscaler_l2 *InstancePtr,
+int XV_HScalerInitialize(XV_Hscaler_l2* InstancePtr, u16 DeviceId);
+void XV_HScalerStart(XV_Hscaler_l2* InstancePtr);
+void XV_HScalerStop(XV_Hscaler_l2* InstancePtr);
+void XV_HScalerLoadExtCoeff(XV_Hscaler_l2* InstancePtr,
                             u16 num_phases,
                             u16 num_taps,
-                            const short *Coeff);
-int XV_HScalerSetup(XV_Hscaler_l2  *InstancePtr,
-                     u32 HeightIn,
-                     u32 WidthIn,
-                     u32 WidthOut,
-                     u32 cformat,
-                     u32 cformatOut);
-int XV_HScalerValidateConfig(XV_Hscaler_l2 *InstancePtr,
+                            const short* Coeff);
+int XV_HScalerSetup(XV_Hscaler_l2* InstancePtr,
+                    u32 HeightIn,
+                    u32 WidthIn,
+                    u32 WidthOut,
+                    u32 cformat,
+                    u32 cformatOut);
+int XV_HScalerValidateConfig(XV_Hscaler_l2* InstancePtr,
                              u32 ColorFormatIn,
                              u32 ColorFormatOut);
-void XV_HScalerDbgReportStatus(XV_Hscaler_l2 *InstancePtr);
+void XV_HScalerDbgReportStatus(XV_Hscaler_l2* InstancePtr);
 
 #ifdef __cplusplus
 }
