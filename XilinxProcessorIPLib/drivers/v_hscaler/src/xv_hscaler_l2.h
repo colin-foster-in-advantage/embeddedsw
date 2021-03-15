@@ -7,7 +7,7 @@
 /**
 *
 * @file xv_hscaler_l2.h
-* @addtogroup v_hscaler_v3_4
+* @addtogroup v_hscaler_v3_3
 * @{
 * @details
 *
@@ -122,8 +122,6 @@ typedef struct {
     XV_hscaler Hsc; /*<< Layer 1 instance */
     u8 UseExtCoeff;
     short coeff[XV_HSCALER_MAX_H_PHASES][XV_HSCALER_MAX_H_TAPS];
-    u64 phasesH[XV_HSCALER_MAX_LINE_WIDTH];
-    u64 phasesH_H[XV_HSCALER_MAX_LINE_WIDTH];
 } XV_Hscaler_l2;
 
 /************************** Macros Definitions *******************************/
