@@ -1,7 +1,7 @@
 /******************************************************************************
-* Copyright (C) 2015 - 2020 Xilinx, Inc.  All rights reserved.
-* SPDX-License-Identifier: MIT
-******************************************************************************/
+ * Copyright (C) 2015 - 2020 Xilinx, Inc.  All rights reserved.
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 /*****************************************************************************/
 /**
@@ -31,9 +31,12 @@
 * 		- Repeat frames if input rate < output rate
 * 	- Auto configuration of processing pipe based on detected use case
 * 		- Scale Up/Down
-* 		- Zoom mode wherein a window in input is scaled to panel resolution
-* 		- Picture-In-Picture mode wherein the input stream is scaled down to
-* 		  a defined window size and background is painted to user define color
+* 		- Zoom mode wherein a window in input is scaled to panel
+resolution
+* 		- Picture-In-Picture mode wherein the input stream is scaled
+down to
+* 		  a defined window size and background is painted to user define
+color
 * 		- Color Space and color format Conversion
 * 		- Interlaced to Progressive conversion
 *
@@ -41,7 +44,8 @@
 *
 * Six types of configurations, each with options, are supported via GUI in IPI
 * 	- Full Configuration: provides all the features mentioned above
-* 	- Five streaming mode configurations have specific limited functionalities:
+* 	- Five streaming mode configurations have specific limited
+functionalities:
 *     - Scaler-only mode allows only for changing the picture size
 *     - Deinterlace-only mode allows for converting interlaced to progressive
 *     - Csc-only mode allows only for changing the color space, e.g. YUV to RGB
@@ -97,7 +101,8 @@
 *
 * <b>Subsystem Driver Usage</b>
 *
-* The subsystem driver in itself is a dormant driver that needs application SW to
+* The subsystem driver in itself is a dormant driver that needs application SW
+to
 * make use of provided API's to configure it at boot-up. Thereafter application
 * SW is responsible to monitor the system for external impetus and call the
 * subsystem API's to communicate the change and trigger the reconfiguration of
@@ -187,7 +192,8 @@
 *
 ******************************************************************************/
 
-#ifndef XVPROCSS_H /**< prevent circular inclusions by using protection macros*/
+#ifndef XVPROCSS_H /**< prevent circular inclusions by using protection \
+                      macros*/
 #define XVPROCSS_H
 
 #ifdef __cplusplus
@@ -195,11 +201,11 @@ extern "C" {
 #endif
 
 /***************************** Include Files *********************************/
-#include "xstatus.h"
-#include "xgpio.h"
 #include "xaxis_switch.h"
-#include "xvidc.h"
 #include "xaxivdma.h"
+#include "xgpio.h"
+#include "xstatus.h"
+#include "xvidc.h"
 #include "xvprocss_log.h"
 
 /**
@@ -209,76 +215,71 @@ extern "C" {
 #include "xv_csc_l2.h"
 #include "xv_deinterlacer_l2.h"
 #include "xv_hcresampler_l2.h"
-#include "xv_vcresampler_l2.h"
 #include "xv_hscaler_l2.h"
-#include "xv_vscaler_l2.h"
 #include "xv_letterbox_l2.h"
+#include "xv_vcresampler_l2.h"
+#include "xv_vscaler_l2.h"
 
 /****************************** Type Definitions ******************************/
 /**
  *  This typedef enumerates the AXIS Switch Port for Sub-Core connection
  */
-typedef enum
-{
-  XVPROCSS_SUBCORE_SCALER_V = 1,
-  XVPROCSS_SUBCORE_SCALER_H,
-  XVPROCSS_SUBCORE_VDMA,
-  XVPROCSS_SUBCORE_LBOX,
-  XVPROCSS_SUBCORE_CR_H,
-  XVPROCSS_SUBCORE_CR_V_IN,
-  XVPROCSS_SUBCORE_CR_V_OUT,
-  XVPROCSS_SUBCORE_CSC,
-  XVPROCSS_SUBCORE_DEINT,
-  XVPROCSS_SUBCORE_MAX
-}XVPROCSS_SUBCORE_ID;
+typedef enum {
+    XVPROCSS_SUBCORE_SCALER_V = 1,
+    XVPROCSS_SUBCORE_SCALER_H,
+    XVPROCSS_SUBCORE_VDMA,
+    XVPROCSS_SUBCORE_LBOX,
+    XVPROCSS_SUBCORE_CR_H,
+    XVPROCSS_SUBCORE_CR_V_IN,
+    XVPROCSS_SUBCORE_CR_V_OUT,
+    XVPROCSS_SUBCORE_CSC,
+    XVPROCSS_SUBCORE_DEINT,
+    XVPROCSS_SUBCORE_MAX
+} XVPROCSS_SUBCORE_ID;
 
 /**
  * This typedef enumerates supported subsystem configuration topology
  */
-typedef enum
-{
-  XVPROCSS_TOPOLOGY_SCALER_ONLY = 0,
-  XVPROCSS_TOPOLOGY_FULL_FLEDGED,
-  XVPROCSS_TOPOLOGY_DEINTERLACE_ONLY,
-  XVPROCSS_TOPOLOGY_CSC_ONLY,
-  XVPROCSS_TOPOLOGY_VCRESAMPLE_ONLY,
-  XVPROCSS_TOPOLOGY_HCRESAMPLE_ONLY,
-  XVPROCSS_TOPOLOGY_NUM_SUPPORTED
-}XVPROCSS_CONFIG_TOPOLOGY;
+typedef enum {
+    XVPROCSS_TOPOLOGY_SCALER_ONLY = 0,
+    XVPROCSS_TOPOLOGY_FULL_FLEDGED,
+    XVPROCSS_TOPOLOGY_DEINTERLACE_ONLY,
+    XVPROCSS_TOPOLOGY_CSC_ONLY,
+    XVPROCSS_TOPOLOGY_VCRESAMPLE_ONLY,
+    XVPROCSS_TOPOLOGY_HCRESAMPLE_ONLY,
+    XVPROCSS_TOPOLOGY_NUM_SUPPORTED
+} XVPROCSS_CONFIG_TOPOLOGY;
 
 /**
  * This typedef enumerates types of Windows (Sub-frames) available in the
  * Subsystem
  */
-typedef enum
-{
-  XVPROCSS_ZOOM_WIN = 0,
-  XVPROCSS_PIP_WIN,
-  XVPROCSS_PIXEL_WIN,
-  XVPROCSS_WIN_NUM_SUPPORTED
-}XVprocSs_Win;
+typedef enum {
+    XVPROCSS_ZOOM_WIN = 0,
+    XVPROCSS_PIP_WIN,
+    XVPROCSS_PIXEL_WIN,
+    XVPROCSS_WIN_NUM_SUPPORTED
+} XVprocSs_Win;
 
 /**
  * This typedef enumerates supported scaling modes
  */
-typedef enum
-{
-  XVPROCSS_SCALE_1_1 = 0,
-  XVPROCSS_SCALE_UP,
-  XVPROCSS_SCALE_DN,
-  XVPROCSS_SCALE_NOT_SUPPORTED
-}XVprocSs_ScaleMode;
+typedef enum {
+    XVPROCSS_SCALE_1_1 = 0,
+    XVPROCSS_SCALE_UP,
+    XVPROCSS_SCALE_DN,
+    XVPROCSS_SCALE_NOT_SUPPORTED
+} XVprocSs_ScaleMode;
 
 /** This typedef enumerates supported Color Channels
  *
  */
-typedef enum
-{
-  XVPROCSS_COLOR_CH_Y_RED = 0,
-  XVPROCSS_COLOR_CH_CB_GREEN,
-  XVPROCSS_COLOR_CH_CR_BLUE,
-  XVPROCSS_COLOR_CH_NUM_SUPPORTED
-}XVprocSs_ColorChannel;
+typedef enum {
+    XVPROCSS_COLOR_CH_Y_RED = 0,
+    XVPROCSS_COLOR_CH_CB_GREEN,
+    XVPROCSS_COLOR_CH_CR_BLUE,
+    XVPROCSS_COLOR_CH_NUM_SUPPORTED
+} XVprocSs_ColorChannel;
 
 /**
  * Video Processing Subsystem context scratch pad memory.
@@ -286,40 +287,38 @@ typedef enum
  * and other meta-data required by the subsystem. Each instance
  * of the subsystem will have its own context data memory
  */
-typedef struct
-{
-  XVidC_VideoWindow RdWindow; /**< window for Zoom/Pip feature support */
-  XVidC_VideoWindow WrWindow; /**< window for Zoom/Pip feature support */
+typedef struct {
+    XVidC_VideoWindow RdWindow; /**< window for Zoom/Pip feature support */
+    XVidC_VideoWindow WrWindow; /**< window for Zoom/Pip feature support */
 
-  UINTPTR DeintBufAddr;       /**< Deinterlacer field buffer Addr. in DDR */
-  u8 PixelWidthInBits;        /**< Number of bits required to store 1 pixel */
+    UINTPTR DeintBufAddr; /**< Deinterlacer field buffer Addr. in DDR */
+    u8 PixelWidthInBits;  /**< Number of bits required to store 1 pixel */
 
-  u8 RtngTable[XVPROCSS_SUBCORE_MAX]; /**< Storage for computed routing map */
-  u8 StartCore[XVPROCSS_SUBCORE_MAX]; /**< Enable flag to start sub-core */
-  u8 RtrNumCores;             /**< Number of sub-cores in routing map */
-  u8 ScaleMode;               /**< Stored computed scaling mode - UP/DN/1:1 */
-  u8 ZoomEn;                  /**< Flag to store Zoom feature state */
-  u8 PipEn;                   /**< Flag to store PIP feature state */
-  u16 VidInWidth;             /**< Input H Active */
-  u16 VidInHeight;            /**< Input V Active */
-  u16 PixelHStepSize;         /**< Increment step size for Pip/Zoom window */
-  XVidC_ColorFormat StrmCformat; /**< processing pipe color format */
-  XVidC_ColorFormat CscIn;    /**< CSC core input color format */
-  XVidC_ColorFormat CscOut;   /**< CSC core output color format */
-  XVidC_ColorFormat HcrIn;    /**< horiz. cresmplr core input color format */
-  XVidC_ColorFormat HcrOut;   /**< horiz. cresmplr core output color format */
-  XLboxColorId LboxBkgndColor; /**< Lbox background color */
-}XVprocSs_ContextData;
+    u8 RtngTable[XVPROCSS_SUBCORE_MAX]; /**< Storage for computed routing map */
+    u8 StartCore[XVPROCSS_SUBCORE_MAX]; /**< Enable flag to start sub-core */
+    u8 RtrNumCores;     /**< Number of sub-cores in routing map */
+    u8 ScaleMode;       /**< Stored computed scaling mode - UP/DN/1:1 */
+    u8 ZoomEn;          /**< Flag to store Zoom feature state */
+    u8 PipEn;           /**< Flag to store PIP feature state */
+    u16 VidInWidth;     /**< Input H Active */
+    u16 VidInHeight;    /**< Input V Active */
+    u16 PixelHStepSize; /**< Increment step size for Pip/Zoom window */
+    XVidC_ColorFormat StrmCformat; /**< processing pipe color format */
+    XVidC_ColorFormat CscIn;       /**< CSC core input color format */
+    XVidC_ColorFormat CscOut;      /**< CSC core output color format */
+    XVidC_ColorFormat HcrIn;  /**< horiz. cresmplr core input color format */
+    XVidC_ColorFormat HcrOut; /**< horiz. cresmplr core output color format */
+    XLboxColorId LboxBkgndColor; /**< Lbox background color */
+} XVprocSs_ContextData;
 
 /**
  * Sub-Core Configuration Table
  */
-typedef struct
-{
-  u16 IsPresent;  /**< Flag to indicate if sub-core is present in the design*/
-  u16 DeviceId;   /**< Device ID of the sub-core */
-  u32 AddrOffset; /**< sub-core offset from subsystem base address */
-}XSubCore;
+typedef struct {
+    u16 IsPresent;  /**< Flag to indicate if sub-core is present in the design*/
+    u16 DeviceId;   /**< Device ID of the sub-core */
+    u32 AddrOffset; /**< sub-core offset from subsystem base address */
+} XSubCore;
 
 /**
  * Video Processing Subsystem configuration structure.
@@ -327,73 +326,72 @@ typedef struct
  * that defines the MAX supported sub-cores within subsystem
  */
 
-typedef struct
-{
-  u16 DeviceId;	         /**< DeviceId is the unique ID  of the device */
-  UINTPTR BaseAddress;   /**< BaseAddress is the physical base address of the
+typedef struct {
+    u16 DeviceId;        /**< DeviceId is the unique ID  of the device */
+    UINTPTR BaseAddress; /**< BaseAddress is the physical base address of the
                               subsystem address range */
-  UINTPTR HighAddress;   /**< HighAddress is the physical MAX address of the
+    UINTPTR HighAddress; /**< HighAddress is the physical MAX address of the
                               subsystem address range */
-  u8 Topology;           /**< Subsystem configuration mode */
-  u8 PixPerClock;        /**< Number of Pixels Per Clock processed by Subsystem */
-  u16 ColorDepth;        /**< Processing precision of the data pipe */
-  u16 NumVidComponents;  /**< Number of Video Components */
-  u16 MaxWidth;          /**< Maximum cols supported by subsystem instance */
-  u16 MaxHeight;         /**< Maximum rows supported by subsystem instance */
-  u16 HasMADI;           /**< Motion Adaptive Deinterlacer available flag */
-  XSubCore RstAximm;     /**< Axi MM reset network instance configuration */
-  XSubCore RstAxis;      /**< Axi stream reset network instance configuration */
-  XSubCore Vdma;         /**< Sub-core instance configuration */
-  XSubCore Router;       /**< Sub-core instance configuration */
-  XSubCore Csc;          /**< Sub-core instance configuration */
-  XSubCore Deint;        /**< Sub-core instance configuration */
-  XSubCore HCrsmplr;     /**< Sub-core instance configuration */
-  XSubCore Hscale;       /**< Sub-core instance configuration */
-  XSubCore Lbox;         /**< Sub-core instance configuration */
-  XSubCore VCrsmplrIn;   /**< Sub-core instance configuration */
-  XSubCore VCrsmplrOut;  /**< Sub-core instance configuration */
-  XSubCore Vscale;       /**< Sub-core instance configuration */
+    u8 Topology;         /**< Subsystem configuration mode */
+    u8 PixPerClock; /**< Number of Pixels Per Clock processed by Subsystem */
+    u16 ColorDepth; /**< Processing precision of the data pipe */
+    u16 NumVidComponents; /**< Number of Video Components */
+    u16 MaxWidth;         /**< Maximum cols supported by subsystem instance */
+    u16 MaxHeight;        /**< Maximum rows supported by subsystem instance */
+    u16 HasMADI;          /**< Motion Adaptive Deinterlacer available flag */
+    XSubCore RstAximm;    /**< Axi MM reset network instance configuration */
+    XSubCore RstAxis;    /**< Axi stream reset network instance configuration */
+    XSubCore Vdma;       /**< Sub-core instance configuration */
+    XSubCore Router;     /**< Sub-core instance configuration */
+    XSubCore Csc;        /**< Sub-core instance configuration */
+    XSubCore Deint;      /**< Sub-core instance configuration */
+    XSubCore HCrsmplr;   /**< Sub-core instance configuration */
+    XSubCore Hscale;     /**< Sub-core instance configuration */
+    XSubCore Lbox;       /**< Sub-core instance configuration */
+    XSubCore VCrsmplrIn; /**< Sub-core instance configuration */
+    XSubCore VCrsmplrOut; /**< Sub-core instance configuration */
+    XSubCore Vscale;      /**< Sub-core instance configuration */
 } XVprocSs_Config;
 
 /**
- * The XVprocSs driver instance data. The user is required to allocate a variable
- * of this type for every XVprocSs device in the system. A pointer to a variable
- * of this type is then passed to the driver API functions.
+ * The XVprocSs driver instance data. The user is required to allocate a
+ * variable of this type for every XVprocSs device in the system. A pointer to a
+ * variable of this type is then passed to the driver API functions.
  */
-typedef struct
-{
-  XVprocSs_Config Config;	         /**< Hardware configuration */
-  u32 IsReady;		                 /**< Device and the driver instance are
-                                       initialized */
+typedef struct {
+    XVprocSs_Config Config; /**< Hardware configuration */
+    u32 IsReady;            /**< Device and the driver instance are
+                          initialized */
 
-  XAxis_Switch *RouterPtr;           /**< handle to sub-core driver instance */
-  XGpio *RstAxisPtr;                 /**< handle to sub-core driver instance */
-  XGpio *RstAximmPtr;                /**< handle to sub-core driver instance */
+    XAxis_Switch* RouterPtr; /**< handle to sub-core driver instance */
+    XGpio* RstAxisPtr;       /**< handle to sub-core driver instance */
+    XGpio* RstAximmPtr;      /**< handle to sub-core driver instance */
 
-  XV_Hcresampler_l2 *HcrsmplrPtr;    /**< handle to sub-core driver instance */
-  XV_Vcresampler_l2 *VcrsmplrInPtr;  /**< handle to sub-core driver instance */
-  XV_Vcresampler_l2 *VcrsmplrOutPtr; /**< handle to sub-core driver instance */
-  XV_Vscaler_l2 *VscalerPtr;         /**< handle to sub-core driver instance */
-  XV_Hscaler_l2 *HscalerPtr;         /**< handle to sub-core driver instance */
-  XAxiVdma *VdmaPtr;                 /**< handle to sub-core driver instance */
-  XV_Lbox_l2 *LboxPtr;               /**< handle to sub-core driver instance */
-  XV_Csc_l2 *CscPtr;                 /**< handle to sub-core driver instance */
-  XV_Deint_l2 *DeintPtr;             /**< handle to sub-core driver instance */
+    XV_Hcresampler_l2* HcrsmplrPtr;   /**< handle to sub-core driver instance */
+    XV_Vcresampler_l2* VcrsmplrInPtr; /**< handle to sub-core driver instance */
+    XV_Vcresampler_l2*
+        VcrsmplrOutPtr;        /**< handle to sub-core driver instance */
+    XV_Vscaler_l2* VscalerPtr; /**< handle to sub-core driver instance */
+    XV_Hscaler_l2* HscalerPtr; /**< handle to sub-core driver instance */
+    XAxiVdma* VdmaPtr;         /**< handle to sub-core driver instance */
+    XV_Lbox_l2* LboxPtr;       /**< handle to sub-core driver instance */
+    XV_Csc_l2* CscPtr;         /**< handle to sub-core driver instance */
+    XV_Deint_l2* DeintPtr;     /**< handle to sub-core driver instance */
 
-  //I/O Streams
-  XVidC_VideoStream VidIn;           /**< Input  AXIS configuration */
-  XVidC_VideoStream VidOut;          /**< Output AXIS configuration */
+    // I/O Streams
+    XVidC_VideoStream VidIn;  /**< Input  AXIS configuration */
+    XVidC_VideoStream VidOut; /**< Output AXIS configuration */
 
-  XVprocSs_ContextData CtxtData;     /**< Internal Scratch pad memory for subsystem
-                                         instance */
-  UINTPTR FrameBufBaseaddr;          /**< Base address for frame buffer storage */
+    XVprocSs_ContextData CtxtData; /**< Internal Scratch pad memory for
+                                      subsystem instance */
+    UINTPTR FrameBufBaseaddr;      /**< Base address for frame buffer storage */
 
-  XVidC_DelayHandler UsrDelayUs;     /**< custom user function for delay/sleep */
-  void *UsrTmrPtr;                   /**< handle to timer instance used by user
-                                         delay function */
+    XVidC_DelayHandler UsrDelayUs; /**< custom user function for delay/sleep */
+    void* UsrTmrPtr;               /**< handle to timer instance used by user
+                                       delay function */
 
 #ifdef XV_VPROCSS_LOG_ENABLE
-  XVprocSs_Log Log;                  /**< A log of events. */
+    XVprocSs_Log Log; /**< A log of events. */
 #endif
 } XVprocSs;
 
@@ -408,7 +406,7 @@ typedef struct
  *
  *****************************************************************************/
 #define XVprocSs_GetSubsystemTopology(XVprocSsPtr) \
-   ((XVprocSsPtr)->Config.Topology)
+    ((XVprocSsPtr)->Config.Topology)
 
 /*****************************************************************************/
 /**
@@ -431,7 +429,7 @@ typedef struct
  *
  *****************************************************************************/
 #define XVprocSs_IsConfigModeMax(XVprocSsPtr) \
-   ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_FULL_FLEDGED)
+    ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_FULL_FLEDGED)
 
 /*****************************************************************************/
 /**
@@ -442,8 +440,8 @@ typedef struct
  * @return Returns 1 if condition is TRUE or 0 if FALSE
  *
  *****************************************************************************/
-#define XVprocSs_IsConfigModeSscalerOnly(XVprocSsPtr)  \
-   ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_SCALER_ONLY)
+#define XVprocSs_IsConfigModeSscalerOnly(XVprocSsPtr) \
+    ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_SCALER_ONLY)
 
 /*****************************************************************************/
 /**
@@ -454,8 +452,8 @@ typedef struct
  * @return Returns 1 if condition is TRUE or 0 if FALSE
  *
  *****************************************************************************/
-#define XVprocSs_IsConfigModeDeinterlaceOnly(XVprocSsPtr)  \
-   ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_DEINTERLACE_ONLY)
+#define XVprocSs_IsConfigModeDeinterlaceOnly(XVprocSsPtr) \
+    ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_DEINTERLACE_ONLY)
 
 /*****************************************************************************/
 /**
@@ -466,8 +464,8 @@ typedef struct
  * @return Returns 1 if condition is TRUE or 0 if FALSE
  *
  *****************************************************************************/
-#define XVprocSs_IsConfigModeCscOnly(XVprocSsPtr)  \
-   ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_CSC_ONLY)
+#define XVprocSs_IsConfigModeCscOnly(XVprocSsPtr) \
+    ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_CSC_ONLY)
 
 /*****************************************************************************/
 /**
@@ -478,8 +476,8 @@ typedef struct
  * @return Returns 1 if condition is TRUE or 0 if FALSE
  *
  *****************************************************************************/
-#define XVprocSs_IsConfigModeVCResampleOnly(XVprocSsPtr)  \
-   ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_VCRESAMPLE_ONLY)
+#define XVprocSs_IsConfigModeVCResampleOnly(XVprocSsPtr) \
+    ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_VCRESAMPLE_ONLY)
 
 /*****************************************************************************/
 /**
@@ -490,8 +488,8 @@ typedef struct
  * @return Returns 1 if condition is TRUE or 0 if FALSE
  *
  *****************************************************************************/
-#define XVprocSs_IsConfigModeHCResampleOnly(XVprocSsPtr)  \
-   ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_HCRESAMPLE_ONLY)
+#define XVprocSs_IsConfigModeHCResampleOnly(XVprocSsPtr) \
+    ((XVprocSsPtr)->Config.Topology == XVPROCSS_TOPOLOGY_HCRESAMPLE_ONLY)
 
 /*****************************************************************************/
 /**
@@ -503,19 +501,19 @@ typedef struct
  * @return Returns 1 if PIP mode is ON or 0 if OFF
  *
  *****************************************************************************/
-#define XVprocSs_IsPipModeOn(XVprocSsPtr)       ((XVprocSsPtr)->CtxtData.PipEn)
+#define XVprocSs_IsPipModeOn(XVprocSsPtr) ((XVprocSsPtr)->CtxtData.PipEn)
 
 /*****************************************************************************/
 /**
- * This macro returns the current state of Zoom Mode stored in subsystem internal
- * scratch pad memory
+ * This macro returns the current state of Zoom Mode stored in subsystem
+ *internal scratch pad memory
  *
  * @param  XVprocSsPtr is a pointer to the Video Processing subsystem instance
  *
  * @return Returns 1 if ZOOM mode is ON or 0 if OFF
  *
  *****************************************************************************/
-#define XVprocSs_IsZoomModeOn(XVprocSsPtr)     ((XVprocSsPtr)->CtxtData.ZoomEn)
+#define XVprocSs_IsZoomModeOn(XVprocSsPtr) ((XVprocSsPtr)->CtxtData.ZoomEn)
 
 /*****************************************************************************/
 /**
@@ -527,8 +525,7 @@ typedef struct
  *
  *****************************************************************************/
 #define XVprocSs_GetPipZoomWinHStepSize(XVprocSsPtr) \
-	                                   ((XVprocSsPtr)->CtxtData.PixelHStepSize)
-
+    ((XVprocSsPtr)->CtxtData.PixelHStepSize)
 
 /*****************************************************************************/
 /**
@@ -541,7 +538,7 @@ typedef struct
  *
  *****************************************************************************/
 #define XVprocSs_ResetPipModeFlag(XVprocSsPtr) \
-                                        ((XVprocSsPtr)->CtxtData.PipEn = FALSE)
+    ((XVprocSsPtr)->CtxtData.PipEn = FALSE)
 
 /*****************************************************************************/
 /**
@@ -553,8 +550,8 @@ typedef struct
  * @return None
  *
  *****************************************************************************/
-#define XVprocSs_ResetZoomModeFlag(XVprocSsPtr)  \
-                                       ((XVprocSsPtr)->CtxtData.ZoomEn = FALSE)
+#define XVprocSs_ResetZoomModeFlag(XVprocSsPtr) \
+    ((XVprocSsPtr)->CtxtData.ZoomEn = FALSE)
 
 /*****************************************************************************/
 /**
@@ -570,7 +567,7 @@ typedef struct
  *
  *****************************************************************************/
 #define XVprocSs_SetStreamColorFormat(Stream, ColorFormat) \
-                                        ((Stream)->ColorFormatId = ColorFormat)
+    ((Stream)->ColorFormatId = ColorFormat)
 
 /*****************************************************************************/
 /**
@@ -586,95 +583,92 @@ typedef struct
  *
  *****************************************************************************/
 #define XVprocSs_SetStreamColorDepth(Stream, ColorDepth) \
-                                            ((Stream)->ColorDepth = ColorDepth)
-
+    ((Stream)->ColorDepth = ColorDepth)
 
 /************************** Function Prototypes ******************************/
 /* Subsystem configuration and management functions */
-int XVprocSs_CfgInitialize(XVprocSs *InstancePtr,
-                           XVprocSs_Config *CfgPtr,
-						   UINTPTR EffectiveAddr);
-int XVprocSs_SetSubsystemConfig(XVprocSs *InstancePtr);
+int XVprocSs_CfgInitialize(XVprocSs* InstancePtr,
+                           XVprocSs_Config* CfgPtr,
+                           UINTPTR EffectiveAddr);
+int XVprocSs_SetSubsystemConfig(XVprocSs* InstancePtr);
 XVprocSs_Config* XVprocSs_LookupConfig(u32 DeviceId);
 
-void XVprocSs_Start(XVprocSs *InstancePtr);
-void XVprocSs_Stop(XVprocSs *InstancePtr);
-void XVprocSs_Reset(XVprocSs *InstancePtr);
+void XVprocSs_Start(XVprocSs* InstancePtr);
+void XVprocSs_Stop(XVprocSs* InstancePtr);
+void XVprocSs_Reset(XVprocSs* InstancePtr);
 
-int XVprocSs_SetVidStreamIn(XVprocSs *InstancePtr,
-                            const XVidC_VideoStream *StrmIn);
-int XVprocSs_SetVidStreamOut(XVprocSs *InstancePtr,
-                             const XVidC_VideoStream *StrmOut);
-int XVprocSs_SetStreamResolution(XVidC_VideoStream *StreamPtr,
+int XVprocSs_SetVidStreamIn(XVprocSs* InstancePtr,
+                            const XVidC_VideoStream* StrmIn);
+int XVprocSs_SetVidStreamOut(XVprocSs* InstancePtr,
+                             const XVidC_VideoStream* StrmOut);
+int XVprocSs_SetStreamResolution(XVidC_VideoStream* StreamPtr,
                                  const XVidC_VideoMode VmId,
-                                 XVidC_VideoTiming const *Timing);
-void XVprocSs_SetFrameBufBaseaddr(XVprocSs *InstancePtr, UINTPTR addr);
+                                 XVidC_VideoTiming const* Timing);
+void XVprocSs_SetFrameBufBaseaddr(XVprocSs* InstancePtr, UINTPTR addr);
 
-void XVprocSs_SetUserTimerHandler(XVprocSs *InstancePtr,
+void XVprocSs_SetUserTimerHandler(XVprocSs* InstancePtr,
                                   XVidC_DelayHandler CallbackFunc,
-                                  void *CallbackRef);
+                                  void* CallbackRef);
 
 /* Zoom and PIP Control functions */
-void XVprocSs_SetZoomMode(XVprocSs *InstancePtr, u8 OnOff);
-void XVprocSs_SetPipMode(XVprocSs *InstancePtr, u8 OnOff);
-void XVprocSs_SetZoomPipWindow(XVprocSs *InstancePtr,
+void XVprocSs_SetZoomMode(XVprocSs* InstancePtr, u8 OnOff);
+void XVprocSs_SetPipMode(XVprocSs* InstancePtr, u8 OnOff);
+void XVprocSs_SetZoomPipWindow(XVprocSs* InstancePtr,
                                XVprocSs_Win mode,
-                               XVidC_VideoWindow *win);
-void XVprocSs_GetZoomPipWindow(XVprocSs *InstancePtr,
+                               XVidC_VideoWindow* win);
+void XVprocSs_GetZoomPipWindow(XVprocSs* InstancePtr,
                                XVprocSs_Win mode,
-                               XVidC_VideoWindow *win);
-void XVprocSs_UpdateZoomPipWindow(XVprocSs *InstancePtr);
+                               XVidC_VideoWindow* win);
+void XVprocSs_UpdateZoomPipWindow(XVprocSs* InstancePtr);
 
 /* Picture Control functions */
-s32 XVprocSs_GetPictureBrightness(XVprocSs *InstancePtr);
-void XVprocSs_SetPictureBrightness(XVprocSs *InstancePtr, s32 NewValue);
-s32 XVprocSs_GetPictureContrast(XVprocSs *InstancePtr);
-void XVprocSs_SetPictureContrast(XVprocSs *InstancePtr, s32 NewValue);
-s32 XVprocSs_GetPictureSaturation(XVprocSs *InstancePtr);
-void XVprocSs_SetPictureSaturation(XVprocSs *InstancePtr, s32 NewValue);
-s32 XVprocSs_GetPictureGain(XVprocSs *InstancePtr,
-                            XVprocSs_ColorChannel ChId);
-void XVprocSs_SetPictureGain(XVprocSs *InstancePtr,
-		                     XVprocSs_ColorChannel ChId,
-		                     s32 NewValue);
-XVidC_ColorStd XVprocSs_GetPictureColorStdIn(XVprocSs *InstancePtr);
-void XVprocSs_SetPictureColorStdIn(XVprocSs *InstancePtr,
-	                               XVidC_ColorStd NewVal);
-XVidC_ColorStd XVprocSs_GetPictureColorStdOut(XVprocSs *InstancePtr);
-void XVprocSs_SetPictureColorStdOut(XVprocSs *InstancePtr,
-	                                XVidC_ColorStd NewVal);
-XVidC_ColorRange XVprocSs_GetPictureColorRange(XVprocSs *InstancePtr);
-void XVprocSs_SetPictureColorRange(XVprocSs *InstancePtr,
-	                               XVidC_ColorRange NewVal);
-int XVprocSs_SetPictureDemoWindow(XVprocSs *InstancePtr,
-	                              XVidC_VideoWindow *Win);
-void XVprocSs_SetPIPBackgroundColor(XVprocSs *InstancePtr,
-		                            XLboxColorId ColorId);
+s32 XVprocSs_GetPictureBrightness(XVprocSs* InstancePtr);
+void XVprocSs_SetPictureBrightness(XVprocSs* InstancePtr, s32 NewValue);
+s32 XVprocSs_GetPictureContrast(XVprocSs* InstancePtr);
+void XVprocSs_SetPictureContrast(XVprocSs* InstancePtr, s32 NewValue);
+s32 XVprocSs_GetPictureSaturation(XVprocSs* InstancePtr);
+void XVprocSs_SetPictureSaturation(XVprocSs* InstancePtr, s32 NewValue);
+s32 XVprocSs_GetPictureGain(XVprocSs* InstancePtr, XVprocSs_ColorChannel ChId);
+void XVprocSs_SetPictureGain(XVprocSs* InstancePtr,
+                             XVprocSs_ColorChannel ChId,
+                             s32 NewValue);
+XVidC_ColorStd XVprocSs_GetPictureColorStdIn(XVprocSs* InstancePtr);
+void XVprocSs_SetPictureColorStdIn(XVprocSs* InstancePtr,
+                                   XVidC_ColorStd NewVal);
+XVidC_ColorStd XVprocSs_GetPictureColorStdOut(XVprocSs* InstancePtr);
+void XVprocSs_SetPictureColorStdOut(XVprocSs* InstancePtr,
+                                    XVidC_ColorStd NewVal);
+XVidC_ColorRange XVprocSs_GetPictureColorRange(XVprocSs* InstancePtr);
+void XVprocSs_SetPictureColorRange(XVprocSs* InstancePtr,
+                                   XVidC_ColorRange NewVal);
+int XVprocSs_SetPictureDemoWindow(XVprocSs* InstancePtr,
+                                  XVidC_VideoWindow* Win);
+void XVprocSs_SetPIPBackgroundColor(XVprocSs* InstancePtr,
+                                    XLboxColorId ColorId);
 
 /* External Filter Load functions */
-void XVprocSs_LoadScalerCoeff(XVprocSs *InstancePtr,
-		                      u32 CoreId,
+void XVprocSs_LoadScalerCoeff(XVprocSs* InstancePtr,
+                              u32 CoreId,
                               u16 num_phases,
                               u16 num_taps,
-                              const short *Coeff);
+                              const short* Coeff);
 
-void XVprocSs_LoadChromaResamplerCoeff(XVprocSs *InstancePtr,
-		                               u32 CoreId,
+void XVprocSs_LoadChromaResamplerCoeff(XVprocSs* InstancePtr,
+                                       u32 CoreId,
                                        u16 num_taps,
-                                       const short *Coeff);
+                                       const short* Coeff);
 
 /* Debug functions */
-void XVprocSs_ReportSubsystemConfig(XVprocSs *InstancePtr);
-void XVprocSs_ReportSubsystemCoreInfo(XVprocSs *InstancePtr);
-void XVprocSs_ReportSubcoreStatus(XVprocSs *InstancePtr,
-		                          u32 SubcoreId);
+void XVprocSs_ReportSubsystemConfig(XVprocSs* InstancePtr);
+void XVprocSs_ReportSubsystemCoreInfo(XVprocSs* InstancePtr);
+void XVprocSs_ReportSubcoreStatus(XVprocSs* InstancePtr, u32 SubcoreId);
 
 /* Event Logging functions. */
-void XVprocSs_LogReset(XVprocSs *InstancePtr);
-u16  XVprocSs_LogRead(XVprocSs *InstancePtr);
-void XVprocSs_LogDisplay(XVprocSs *InstancePtr);
+void XVprocSs_LogReset(XVprocSs* InstancePtr);
+u16 XVprocSs_LogRead(XVprocSs* InstancePtr);
+void XVprocSs_LogDisplay(XVprocSs* InstancePtr);
 #ifdef XV_VPROCSS_LOG_ENABLE
-void XVprocSs_LogWrite(XVprocSs *InstancePtr, XVprocSs_LogEvent Evt, u8 Data);
+void XVprocSs_LogWrite(XVprocSs* InstancePtr, XVprocSs_LogEvent Evt, u8 Data);
 #else
 #define XVprocSs_LogWrite(...)
 #endif

@@ -1,7 +1,7 @@
 /******************************************************************************
-* Copyright (C) 2015 - 2020 Xilinx, Inc.  All rights reserved.
-* SPDX-License-Identifier: MIT
-******************************************************************************/
+ * Copyright (C) 2015 - 2020 Xilinx, Inc.  All rights reserved.
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 /*****************************************************************************/
 /**
@@ -24,8 +24,8 @@
 * </pre>
 *
 ******************************************************************************/
-#ifndef XVPROCSS_ROUTER_H__  /* prevent circular inclusions */
-#define XVPROCSS_ROUTER_H__  /* by using protection macros */
+#ifndef XVPROCSS_ROUTER_H__ /* prevent circular inclusions */
+#define XVPROCSS_ROUTER_H__ /* by using protection macros */
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,9 +35,9 @@ extern "C" {
 /************************** Constant Definitions *****************************/
 
 /************************** Function Prototypes ******************************/
-int XVprocSs_BuildRoutingTable(XVprocSs *XVprocSsPtr);
-void XVprocSs_ProgRouterMux(XVprocSs *XVprocSsPtr);
-void XVprocSs_SetupRouterDataFlow(XVprocSs *XVprocSsPtr);
+int XVprocSs_BuildRoutingTable(XVprocSs* XVprocSsPtr);
+void XVprocSs_ProgRouterMux(XVprocSs* XVprocSsPtr);
+void XVprocSs_SetupRouterDataFlow(XVprocSs* XVprocSsPtr);
 
 #ifdef __cplusplus
 }
