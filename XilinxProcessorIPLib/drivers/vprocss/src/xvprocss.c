@@ -74,20 +74,54 @@
 /**
  * This typedef declares the driver instances of all the cores in the subsystem
  */
+#ifndef XPAR_XAXIS_SWITCH_NUM_INSTANCES
+#define XPAR_XAXIS_SWITCH_NUM_INSTANCES 0
+#endif
+XAxis_Switch Routers[XPAR_XAXIS_SWITCH_NUM_INSTANCES];
+
+#ifndef XPAR_XV_HCRESAMPLER_NUM_INSTANCES
+#define XPAR_XV_HCRESAMPLER_NUM_INSTANCES 0
+#endif
+static XV_Hcresampler_l2 Hcrsmplrs[XPAR_XV_HCRESAMPLER_NUM_INSTANCES];
+
+#ifndef XPAR_XV_VCRESAMPLER_NUM_INSTANCES
+#define XPAR_XV_VCRESAMPLER_NUM_INSTANCES 0
+#endif
+static XV_Vcresampler_l2 Vcrsmplrs[XPAR_XV_VCRESAMPLER_NUM_INSTANCES];
+
+#ifndef XPAR_XV_VSCALER_NUM_INSTANCES
+#define XPAR_XV_VSCALER_NUM_INSTANCES 0
+#endif
+static XV_Vscaler_l2 Vscalers[XPAR_XV_VSCALER_NUM_INSTANCES];
+
+#ifndef XPAR_XV_HSCALER_NUM_INSTANCES
+#define XPAR_XV_HSCALER_NUM_INSTANCES 0
+#endif
+static XV_Hscaler_l2 Hscalers[XPAR_XV_HSCALER_NUM_INSTANCES];
+
+#ifndef XPAR_XAXIVDMA_NUM_INSTANCES
+#define XPAR_XAXIVDMA_NUM_INSTANCES 0
+#endif
+static XAxiVdma Vdmas[XPAR_XAXIVDMA_NUM_INSTANCES];
+
+#ifndef XPAR_XV_LETTERBOX_NUM_INSTANCES
+#define XPAR_XV_LETTERBOX_NUM_INSTANCES 0
+#endif
+static XV_Lbox_l2 Lboxes[XPAR_XV_LETTERBOX_NUM_INSTANCES];
+
+#ifndef XPAR_XV_CSC_NUM_INSTANCES
+#define XPAR_XV_CSC_NUM_INSTANCES 0
+#endif
+static XV_Csc_l2 Cscs[XPAR_XV_CSC_NUM_INSTANCES];
+
+#ifndef XPAR_XV_DEINTERLACER_NUM_INSTANCES
+#define XPAR_XV_DEINTERLACER_NUM_INSTANCES 0
+#endif
+static XV_Deint_l2 Deints[XPAR_XV_DEINTERLACER_NUM_INSTANCES];
+
 typedef struct {
-    XAxis_Switch Router;
     XGpio RstAxis;   // Reset for IP's running at AXIS Clk
     XGpio RstAximm;  // Reset for IP's with AXI MM interface
-
-    XV_Hcresampler_l2 Hcrsmplr;
-    XV_Vcresampler_l2 VcrsmplrIn;
-    XV_Vcresampler_l2 VcrsmplrOut;
-    XV_Vscaler_l2 Vscaler;
-    XV_Hscaler_l2 Hscaler;
-    XAxiVdma Vdma;
-    XV_Lbox_l2 Lbox;
-    XV_Csc_l2 Csc;
-    XV_Deint_l2 Deint;
 } XVprocSs_SubCores;
 
 /**************************** Local Global ***********************************/
@@ -273,43 +307,39 @@ void XVprocSs_SetUserTimerHandler(XVprocSs* InstancePtr,
 static void GetIncludedSubcores(XVprocSs* XVprocSsPtr) {
     XVprocSsPtr->HcrsmplrPtr =
         ((XVprocSsPtr->Config.HCrsmplr.IsPresent)
-             ? (&subcoreRepo[XVprocSsPtr->Config.DeviceId].Hcrsmplr)
+             ? (&Hcrsmplrs[XVprocSsPtr->Config.HCrsmplr.DeviceId])
              : NULL);
     XVprocSsPtr->VcrsmplrInPtr =
         ((XVprocSsPtr->Config.VCrsmplrIn.IsPresent)
-             ? (&subcoreRepo[XVprocSsPtr->Config.DeviceId].VcrsmplrIn)
+             ? (&Vcrsmplrs[XVprocSsPtr->Config.VCrsmplrIn.DeviceId])
              : NULL);
     XVprocSsPtr->VcrsmplrOutPtr =
         ((XVprocSsPtr->Config.VCrsmplrOut.IsPresent)
-             ? (&subcoreRepo[XVprocSsPtr->Config.DeviceId].VcrsmplrOut)
+             ? (&Vcrsmplrs[XVprocSsPtr->Config.VCrsmplrOut.DeviceId])
              : NULL);
     XVprocSsPtr->VscalerPtr =
         ((XVprocSsPtr->Config.Vscale.IsPresent)
-             ? (&subcoreRepo[XVprocSsPtr->Config.DeviceId].Vscaler)
+             ? (&Vscalers[XVprocSsPtr->Config.Vscale.DeviceId])
              : NULL);
     XVprocSsPtr->HscalerPtr =
         ((XVprocSsPtr->Config.Hscale.IsPresent)
-             ? (&subcoreRepo[XVprocSsPtr->Config.DeviceId].Hscaler)
+             ? (&Hscalers[XVprocSsPtr->Config.Hscale.DeviceId])
              : NULL);
-    XVprocSsPtr->VdmaPtr =
-        ((XVprocSsPtr->Config.Vdma.IsPresent)
-             ? (&subcoreRepo[XVprocSsPtr->Config.DeviceId].Vdma)
-             : NULL);
-    XVprocSsPtr->LboxPtr =
-        ((XVprocSsPtr->Config.Lbox.IsPresent)
-             ? (&subcoreRepo[XVprocSsPtr->Config.DeviceId].Lbox)
-             : NULL);
-    XVprocSsPtr->CscPtr =
-        ((XVprocSsPtr->Config.Csc.IsPresent)
-             ? (&subcoreRepo[XVprocSsPtr->Config.DeviceId].Csc)
-             : NULL);
-    XVprocSsPtr->DeintPtr =
-        ((XVprocSsPtr->Config.Deint.IsPresent)
-             ? (&subcoreRepo[XVprocSsPtr->Config.DeviceId].Deint)
-             : NULL);
+    XVprocSsPtr->VdmaPtr = ((XVprocSsPtr->Config.Vdma.IsPresent)
+                                ? (&Vdmas[XVprocSsPtr->Config.Vdma.DeviceId])
+                                : NULL);
+    XVprocSsPtr->LboxPtr = ((XVprocSsPtr->Config.Lbox.IsPresent)
+                                ? (&Lboxes[XVprocSsPtr->Config.Lbox.DeviceId])
+                                : NULL);
+    XVprocSsPtr->CscPtr = ((XVprocSsPtr->Config.Csc.IsPresent)
+                               ? (&Cscs[XVprocSsPtr->Config.Csc.DeviceId])
+                               : NULL);
+    XVprocSsPtr->DeintPtr = ((XVprocSsPtr->Config.Deint.IsPresent)
+                                 ? (&Deints[XVprocSsPtr->Config.Deint.DeviceId])
+                                 : NULL);
     XVprocSsPtr->RouterPtr =
         ((XVprocSsPtr->Config.Router.IsPresent)
-             ? (&subcoreRepo[XVprocSsPtr->Config.DeviceId].Router)
+             ? (&Routers[XVprocSsPtr->Config.Router.DeviceId])
              : NULL);
     XVprocSsPtr->RstAxisPtr =
         ((XVprocSsPtr->Config.RstAxis.IsPresent)
@@ -574,10 +604,8 @@ static void SetPowerOnDefaultState(XVprocSs* XVprocSsPtr) {
                  * case Num_Channel	Color Depth		PixelWidth
                  * Align
                  * ----------------------------------------------------
-                 *    2				10				20
-                 * 24
-                 *    3				10				30
-                 * 32
+                 *    2				10 20 24 3
+                 * 10				30 32
                  *
                  *    HW will do the bit padding for 20->24 and 30->32
                  */
